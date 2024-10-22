@@ -52,7 +52,7 @@ describe "Posters API" do
     end
 
     it "sends a list of posters" do 
-      get '/api/v1/posters'
+      get "/api/v1/posters"
       expect(response).to be_successful
       posters = JSON.parse(response.body)
       expect(posters["data"].count).to eq(3)
@@ -83,9 +83,31 @@ describe "Posters API" do
     end
   
     it "fetches a single poster" do
-      get `/api/v1/posters/#{@poster_1_id}`
+      get "/api/v1/posters/#{@poster_1_id}"
       expect(response).to be_successful
-      posters = JSON.parse(response.body)
+      poster = JSON.parse(response.body)
+      # binding.pry
+      expect(poster["data"]).to have_key("id")
+      expect(poster["data"]["id"]).to be_an(Integer)
+
+      expect(poster["data"]["attributes"]).to have_key("name")
+      expect(poster["data"]["attributes"]["name"]).to be_a(String)
+
+      expect(poster["data"]["attributes"]).to have_key("description")
+      expect(poster["data"]["attributes"]["description"]).to be_a(String)
+
+      expect(poster["data"]["attributes"]).to have_key("price")
+      expect(poster["data"]["attributes"]["price"]).to be_a(Float)
+
+      expect(poster["data"]["attributes"]).to have_key("year")
+      expect(poster["data"]["attributes"]["year"]).to be_a(Integer)
+
+      expect(poster["data"]["attributes"]).to have_key("vintage")
+      expect(poster["data"]["attributes"]["vintage"]).to be(true).or be(false)
+
+      expect(poster["data"]["attributes"]).to have_key("img_url")
+      expect(poster["data"]["attributes"]["img_url"]).to be_a(String)
+
     end
   end
 end
