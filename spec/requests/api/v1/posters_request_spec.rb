@@ -24,6 +24,20 @@ describe "Posters API" do
     expect(created_poster.img_url).to eq(poster_params[:img_url])
   end
 
+  it "can update an exisiting poster" do
+    id = Poster.create(name: "Shark Bait", description: "Sharks Need To Eat Too!", price: 40.00, year: 2021, vintage: false, img_url: "https://i.ebayimg.com/images/g/oXoAAOSwOAFmqZsG/s-l1600.webp").id
+    old_poster_description = Poster.last.description
+    poster_params = { description: "SCUBA Divers Taste Best!" }
+    headers = { "CONTENT_TYPE" => "application/json" }
+
+    patch "/api/v1/posters/#{id}", headers: headers, params: JSON.generate({poster: poster_params})
+    poster = Poster.find_by(id: id)
+
+    expect(response).to be_successful
+    expect(poster.description).to_not eq(old_poster_description)
+    expect(poster.description).to eq("SCUBA Divers Taste Best!")
+  end
+
   describe "fetch all posters" do
     before :each do
       Poster.create(name: "REGRET",
