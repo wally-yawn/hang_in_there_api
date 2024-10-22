@@ -24,42 +24,41 @@ describe "Posters API" do
     expect(created_poster.img_url).to eq(poster_params[:img_url])
   end
 
-  describe "fetch all posters" do
+  describe "fetches posters" do
     before :each do
-      Poster.create(name: "REGRET",
+      @poster_1_id = Poster.create(name: "REGRET",
         description: "Hard work rarely pays off.",
         price: 89.00,
         year: 2018,
         vintage: true,
-        img_url:  "https://plus.unsplash.com/premium_photo-1661293818249-fddbddf07a5d")
+        img_url:  "https://plus.unsplash.com/premium_photo-1661293818249-fddbddf07a5d").id
 
-      Poster.create(
+      @poster_2_id = Poster.create(
         name: "FAILURE",
         description: "Why bother trying? It's probably not worth it.",
         price: 68.00,
         year: 2019,
         vintage: true,
         img_url: "https://plus.unsplash.com/premium_photo-1661293818249-fddbddf07a5d"
-      )
-      Poster.create(
+      ).id
+      @poster_3_id = Poster.create(
         name: "MEDIOCRITY",
         description: "Dreams are just that—dreams.",
         price: 127.00,
         year: 2021,
         vintage: false,
         img_url: "https://plus.unsplash.com/premium_photo-1661293818249-fddbddf07a5d"
-      )
+      ).id
     end
 
     it "sends a list of posters" do 
-      get '/api/v1/posters'
+      get "/api/v1/posters"
       expect(response).to be_successful
       posters = JSON.parse(response.body)
-      # binding.pry
       expect(posters["data"].count).to eq(3)
 
       posters["data"].each do |poster|
-        # binding.pry
+
         expect(poster).to have_key("id")
         expect(poster["id"]).to be_an(Integer)
 
@@ -81,6 +80,34 @@ describe "Posters API" do
         expect(poster["attributes"]).to have_key("img_url")
         expect(poster["attributes"]["img_url"]).to be_a(String)
       end
+    end
+  
+    it "fetches a single poster" do
+      get "/api/v1/posters/#{@poster_1_id}"
+      expect(response).to be_successful
+      poster = JSON.parse(response.body)
+      # binding.pry
+      expect(poster["data"]).to have_key("id")
+      expect(poster["data"]["id"]).to be_an(Integer)
+
+      expect(poster["data"]["attributes"]).to have_key("name")
+      expect(poster["data"]["attributes"]["name"]).to be_a(String)
+
+      expect(poster["data"]["attributes"]).to have_key("description")
+      expect(poster["data"]["attributes"]["description"]).to be_a(String)
+
+      expect(poster["data"]["attributes"]).to have_key("price")
+      expect(poster["data"]["attributes"]["price"]).to be_a(Float)
+
+      expect(poster["data"]["attributes"]).to have_key("year")
+      expect(poster["data"]["attributes"]["year"]).to be_a(Integer)
+
+      expect(poster["data"]["attributes"]).to have_key("vintage")
+      expect(poster["data"]["attributes"]["vintage"]).to be(true).or be(false)
+
+      expect(poster["data"]["attributes"]).to have_key("img_url")
+      expect(poster["data"]["attributes"]["img_url"]).to be_a(String)
+
     end
   end
 end
