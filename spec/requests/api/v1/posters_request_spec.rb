@@ -56,6 +56,7 @@ describe "Posters API" do
       expect(response).to be_successful
       posters = JSON.parse(response.body)
       expect(posters["data"].count).to eq(3)
+      expect(posters["meta"]["count"]).to eq(3)
 
       posters["data"].each do |poster|
 
