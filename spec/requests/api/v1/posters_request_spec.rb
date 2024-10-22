@@ -110,4 +110,16 @@ describe "Posters API" do
 
     end
   end
+
+  it "can delete a poster" do
+    poster = Poster.create(name: "Shark Bait", description: "Sharks Need To Eat Too!", price: 40.00, year: 2021, vintage: false, img_url: "https://i.ebayimg.com/images/g/oXoAAOSwOAFmqZsG/s-l1600.webp")
+
+    expect(Poster.count).to eq(1)
+
+    delete "/api/v1/posters/#{poster.id}"
+
+    expect(response).to be_successful
+    expect(Poster.count).to eq(0)
+    expect{Poster.find(poster.id)}.to raise_error(ActiveRecord::RecordNotFound)
+  end
 end
