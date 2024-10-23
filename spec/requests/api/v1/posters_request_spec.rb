@@ -164,13 +164,16 @@ describe "Posters API" do
     expect(Poster.count).to eq(2)
 
     get "/api/v1/posters/?min_price=88.00"
+    posters = JSON.parse(response.body)
 
     expect(response).to be_successful
-    expect(poster2.name).to eq("Shark Hunter")
-
+    expect(posters["meta"]["count"]).to eq(1)
+    expect(posters["data"][0]["attributes"]["name"]).to eq("Shark Hunter")
+    
     get "/api/v1/posters/?max_price=88.00"
+    posters = JSON.parse(response.body)
 
-    expect(response).to be_successful
-    expect(poster1.name).to eq("Shark Bait")
+    expect(posters["meta"]["count"]).to eq(1)
+    expect(posters["data"][0]["attributes"]["name"]).to eq("Shark Bait")
   end
 end
