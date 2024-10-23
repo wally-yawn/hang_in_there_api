@@ -15,7 +15,14 @@ class Api::V1::PostersController < ApplicationController
       posters = Poster.all.order("created_at desc")
     elsif params[:sort] == "asc"
         posters = Poster.all.order("created_at asc")
-    else posters = Poster.all
+    elsif params[:min_price]
+      price = params[:min_price].to_i
+      posters = Poster.where("price > ?", price)
+    elsif params[:max_price]
+      price = params[:max_price].to_i
+      posters = Poster.where("price < ?", price)
+    else 
+      posters = Poster.all
     end
     render json: PosterSerializer.format_posters(posters)
   end
