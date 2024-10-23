@@ -155,4 +155,22 @@ describe "Posters API" do
     expect(Poster.count).to eq(0)
     expect{Poster.find(poster.id)}.to raise_error(ActiveRecord::RecordNotFound)
   end
+
+  it 'can filter posters by price' do
+    poster1 = Poster.create(name: "Shark Bait", description: "Sharks Need To Eat Too!", price: 40.00, year: 2021, vintage: false, img_url: "https://i.ebayimg.com/images/g/oXoAAOSwOAFmqZsG/s-l1600.webp")
+
+    poster2 = Poster.create(name: "Shark Hunter", description: "People Eating Sharks", price: 140.00, year: 1989, vintage: true, img_url: "https://i.ebayimg.com/images/g/oXoAAOSwOAFmqZsG/s-l1600.webp")
+
+    expect(Poster.count).to eq(2)
+
+    get "/api/v1/posters/?min_price=88.00"
+
+    expect(response).to be_successful
+    expect(poster2.name).to eq("Shark Hunter")
+
+    get "/api/v1/posters/?max_price=88.00"
+
+    expect(response).to be_successful
+    expect(poster1.name).to eq("Shark Bait")
+  end
 end
