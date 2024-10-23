@@ -124,6 +124,24 @@ describe "Posters API" do
       expect(poster["data"]["attributes"]["img_url"]).to be_a(String)
 
     end
+
+    it "sends a list of posters in desc order by created_at" do
+      get "/api/v1/posters?sort=desc"
+      expect(response).to be_successful
+      posters = JSON.parse(response.body)
+      expect(posters["data"][0]["id"]).to eq(@poster_3_id)
+      expect(posters["data"][1]["id"]).to eq(@poster_2_id)
+      expect(posters["data"][2]["id"]).to eq(@poster_1_id)
+    end
+
+    it "sends a list of posters in asc order by created_at" do
+      get "/api/v1/posters?sort=asc"
+      expect(response).to be_successful
+      posters = JSON.parse(response.body)
+      expect(posters["data"][0]["id"]).to eq(@poster_1_id)
+      expect(posters["data"][1]["id"]).to eq(@poster_2_id)
+      expect(posters["data"][2]["id"]).to eq(@poster_3_id)
+    end
   end
 
   it "can delete a poster" do
