@@ -1,6 +1,7 @@
 class PosterSerializer
   def self.format_posters(posters)
     posters_data = posters.map do |poster|
+      # binding.pry
       {
       id: poster.id,
       type: "poster",

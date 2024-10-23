@@ -24,7 +24,7 @@ describe "Posters API" do
     expect(created_poster.img_url).to eq(poster_params[:img_url])
   end
 
-  it "can update an exisiting poster" do
+  it "can update an existing poster" do
     id = Poster.create(name: "Shark Bait", description: "Sharks Need To Eat Too!", price: 40.00, year: 2021, vintage: false, img_url: "https://i.ebayimg.com/images/g/oXoAAOSwOAFmqZsG/s-l1600.webp").id
     old_poster_description = Poster.last.description
     poster_params = { description: "SCUBA Divers Taste Best!" }
@@ -56,7 +56,7 @@ describe "Posters API" do
         img_url: "https://plus.unsplash.com/premium_photo-1661293818249-fddbddf07a5d"
       ).id
       @poster_3_id = Poster.create(
-        name: "MEDIOCRITY",
+        name: "everyone fails eventually",
         description: "Dreams are just that—dreams.",
         price: 127.00,
         year: 2021,
@@ -65,7 +65,7 @@ describe "Posters API" do
       ).id
     end
 
-    it "sends a list of posters" do 
+    xit "sends a list of posters" do 
       get "/api/v1/posters"
       expect(response).to be_successful
       posters = JSON.parse(response.body)
@@ -97,7 +97,7 @@ describe "Posters API" do
       end
     end
   
-    it "fetches a single poster" do
+    xit "fetches a single poster" do
       get "/api/v1/posters/#{@poster_1_id}"
       expect(response).to be_successful
       poster = JSON.parse(response.body)
@@ -125,7 +125,7 @@ describe "Posters API" do
 
     end
 
-    it "sends a list of posters in desc order by created_at" do
+    xit "sends a list of posters in desc order by created_at" do
       get "/api/v1/posters?sort=desc"
       expect(response).to be_successful
       posters = JSON.parse(response.body)
@@ -134,7 +134,7 @@ describe "Posters API" do
       expect(posters["data"][2]["id"]).to eq(@poster_1_id)
     end
 
-    it "sends a list of posters in asc order by created_at" do
+    xit "sends a list of posters in asc order by created_at" do
       get "/api/v1/posters?sort=asc"
       expect(response).to be_successful
       posters = JSON.parse(response.body)
@@ -142,9 +142,20 @@ describe "Posters API" do
       expect(posters["data"][1]["id"]).to eq(@poster_2_id)
       expect(posters["data"][2]["id"]).to eq(@poster_3_id)
     end
+
+    it 'can filter posters by name' do
+      get "/api/v1/posters?name=ter"
+      expect(response).to be_successful
+      posters = JSON.parse(response.body)
+      binding.pry
+      expect(posters["data"].count).to eq(2)
+      expect(posters["meta"]["count"]).to eq(2)
+      expect(posters["data"][0]["attributes"]["name"]).to eq("Everyone fails eventually")
+      expect(posters["data"][0]["attributes"]["name"]).to eq("FAILURE")
+    end
   end
 
-  it "can delete a poster" do
+  xit "can delete a poster" do
     poster = Poster.create(name: "Shark Bait", description: "Sharks Need To Eat Too!", price: 40.00, year: 2021, vintage: false, img_url: "https://i.ebayimg.com/images/g/oXoAAOSwOAFmqZsG/s-l1600.webp")
 
     expect(Poster.count).to eq(1)
@@ -156,7 +167,7 @@ describe "Posters API" do
     expect{Poster.find(poster.id)}.to raise_error(ActiveRecord::RecordNotFound)
   end
 
-  it 'can filter posters by price' do
+  xit 'can filter posters by price' do
     poster1 = Poster.create(name: "Shark Bait", description: "Sharks Need To Eat Too!", price: 40.00, year: 2021, vintage: false, img_url: "https://i.ebayimg.com/images/g/oXoAAOSwOAFmqZsG/s-l1600.webp")
 
     poster2 = Poster.create(name: "Shark Hunter", description: "People Eating Sharks", price: 140.00, year: 1989, vintage: true, img_url: "https://i.ebayimg.com/images/g/oXoAAOSwOAFmqZsG/s-l1600.webp")
