@@ -24,7 +24,7 @@ class Api::V1::PostersController < ApplicationController
       posters = Poster.where("price < ?", price)
     elsif params.key?(:name)
       nameFragment = params[:name]
-      posters = Poster.where("LOWER(name) like ?", "%#{nameFragment.downcase}%")
+      posters = Poster.where("LOWER(name) like ?", "%#{nameFragment.downcase}%").order("LOWER(name)")
     else 
       posters = Poster.all
     end
