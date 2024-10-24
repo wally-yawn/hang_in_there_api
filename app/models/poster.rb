@@ -1,4 +1,11 @@
 class Poster < ApplicationRecord
+  validates :name, presence: true, uniqueness: true
+  validates :description, presence: true
+  validates :year, presence: true
+  validates :price, presence: true
+  validates :vintage, presence: true
+  validates :img_url, presence: true
+
   def self.filter_and_sort(params)
     posters = Poster.all
 
