@@ -73,12 +73,11 @@ describe "Posters API" do
       expect(posters["meta"]["count"]).to eq(3)
 
       posters["data"].each do |poster|
-
         expect(poster).to have_key("id")
         expect(poster["id"]).to be_an(Integer)
 
-        expect(poster["data"]).to have_key("type")
-        expect(poster["data"]["type"]).to eq("poster")
+        expect(poster).to have_key("type")
+        expect(poster["type"]).to eq("poster")
 
         expect(poster["attributes"]).to have_key("name")
         expect(poster["attributes"]["name"]).to be_a(String)

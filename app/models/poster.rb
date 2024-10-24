@@ -1,8 +1,8 @@
 class Poster < ApplicationRecord
   validates :name, presence: true, uniqueness: true
   validates :description, presence: true
-  validates :year, presence: true
-  validates :price, presence: true
+  validates :year, presence: true, numericality: { only_integer: true }
+  validates :price, presence: true, numericality: { greater_than: 0 }
   validate :vintage_presence
   validates :img_url, presence: true
 
