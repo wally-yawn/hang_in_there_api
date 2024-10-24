@@ -3,7 +3,7 @@ class Poster < ApplicationRecord
   validates :description, presence: true
   validates :year, presence: true
   validates :price, presence: true
-  validates :vintage, presence: true
+  validate :vintage_presence
   validates :img_url, presence: true
 
   def self.filter_and_sort(params)
@@ -28,5 +28,9 @@ class Poster < ApplicationRecord
       posters = posters.where("LOWER(name) like ?", "%#{nameFragment.downcase}%").order("LOWER(name)")
     end
     posters
+  end
+
+  def vintage_presence
+    errors.add(:vintage, "can't be blank") if vintage.nil?
   end
 end
