@@ -11,23 +11,7 @@ class Api::V1::PostersController < ApplicationController
   end
 
   def index
-    puts "Params is: #{params}"
-    if params[:sort] == "desc"
-      posters = Poster.all.order("created_at desc")
-    elsif params[:sort] == "asc"
-        posters = Poster.all.order("created_at asc")
-    elsif params[:min_price]
-      price = params[:min_price].to_i
-      posters = Poster.where("price > ?", price)
-    elsif params[:max_price]
-      price = params[:max_price].to_i
-      posters = Poster.where("price < ?", price)
-    elsif params.key?(:name)
-      nameFragment = params[:name]
-      posters = Poster.where("LOWER(name) like ?", "%#{nameFragment.downcase}%").order("LOWER(name)")
-    else 
-      posters = Poster.all
-    end
+    posters = Poster.filter_and_sort(params)
     render json: PosterSerializer.format_posters(posters)
   end
   
