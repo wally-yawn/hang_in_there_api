@@ -77,6 +77,9 @@ describe "Posters API" do
         expect(poster).to have_key("id")
         expect(poster["id"]).to be_an(Integer)
 
+        expect(poster["data"]).to have_key("type")
+        expect(poster["data"]["type"]).to eq("poster")
+
         expect(poster["attributes"]).to have_key("name")
         expect(poster["attributes"]["name"]).to be_a(String)
 
@@ -101,9 +104,12 @@ describe "Posters API" do
       get "/api/v1/posters/#{@poster_1_id}"
       expect(response).to be_successful
       poster = JSON.parse(response.body)
-      # binding.pry
+
       expect(poster["data"]).to have_key("id")
       expect(poster["data"]["id"]).to be_an(Integer)
+
+      expect(poster["data"]).to have_key("type")
+      expect(poster["data"]["type"]).to eq("poster")
 
       expect(poster["data"]["attributes"]).to have_key("name")
       expect(poster["data"]["attributes"]["name"]).to be_a(String)
