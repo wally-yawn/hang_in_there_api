@@ -71,7 +71,6 @@ describe "Posters API" do
       posters = JSON.parse(response.body)
       expect(posters["data"].count).to eq(3)
       expect(posters["meta"]["count"]).to eq(3)
-
       posters["data"].each do |poster|
 
         expect(poster).to have_key("id")
@@ -185,5 +184,16 @@ describe "Posters API" do
 
     expect(posters["meta"]["count"]).to eq(1)
     expect(posters["data"][0]["attributes"]["name"]).to eq("Shark Bait")
+  end
+
+  describe "validations" do
+    #missing name
+    #name not unique
+    #missing description
+    #missing year
+    #non integer year
+    #missing price
+    #non float price
+    #missing vintage
   end
 end

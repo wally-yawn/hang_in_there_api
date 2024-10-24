@@ -11,7 +11,6 @@ class Api::V1::PostersController < ApplicationController
   end
 
   def index
-    puts "Params is: #{params}"
     if params[:sort] == "desc"
       posters = Poster.all.order("created_at desc")
     elsif params[:sort] == "asc"
