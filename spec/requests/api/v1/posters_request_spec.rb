@@ -24,7 +24,7 @@ describe "Posters API" do
     expect(created_poster.img_url).to eq(poster_params[:img_url])
   end
 
-  it "can update an exisiting poster" do
+  it "can update an existing poster" do
     id = Poster.create(name: "Shark Bait", description: "Sharks Need To Eat Too!", price: 40.00, year: 2021, vintage: false, img_url: "https://i.ebayimg.com/images/g/oXoAAOSwOAFmqZsG/s-l1600.webp").id
     old_poster_description = Poster.last.description
     poster_params = { description: "SCUBA Divers Taste Best!" }
@@ -56,7 +56,7 @@ describe "Posters API" do
         img_url: "https://plus.unsplash.com/premium_photo-1661293818249-fddbddf07a5d"
       ).id
       @poster_3_id = Poster.create(
-        name: "MEDIOCRITY",
+        name: "everyone fails eventually",
         description: "Dreams are just that—dreams.",
         price: 127.00,
         year: 2021,
@@ -141,6 +141,16 @@ describe "Posters API" do
       expect(posters["data"][0]["id"]).to eq(@poster_1_id)
       expect(posters["data"][1]["id"]).to eq(@poster_2_id)
       expect(posters["data"][2]["id"]).to eq(@poster_3_id)
+    end
+
+    it 'can filter posters by name' do
+      get "/api/v1/posters?name=fail"
+      expect(response).to be_successful
+      posters = JSON.parse(response.body)
+      expect(posters["data"].count).to eq(2)
+      expect(posters["meta"]["count"]).to eq(2)
+      expect(posters["data"][0]["attributes"]["name"]).to eq("everyone fails eventually")
+      expect(posters["data"][1]["attributes"]["name"]).to eq("FAILURE")
     end
   end
 
